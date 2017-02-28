@@ -38,7 +38,10 @@ var aqiData = [
  var str="";
  for(var i=0;i<aqiData.length;i++){
  	if(aqiData[i][1]>60){
- 		str+="<li>"+aqiData[i][0]+":"+aqiData[i][1]+"</li>";
+ 		for(var j=i;j<aqiData.length;j++){
+		 		str+="<li>"+aqiData[j][0]+":"+aqiData[j][1]+"</li>";
+ 		}
+ 		return ;
  	}
  }
  doc.innerHTML=str;
