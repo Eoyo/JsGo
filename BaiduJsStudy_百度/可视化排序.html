@@ -41,9 +41,9 @@
     		可视化的奇偶排序
     	</h2>
     	<div>
-    		可以在排序时输入数据;input:10~60 个数最多60;
+    		可以在排序时输入数据;input:10~100个数最多60;
     	</div>
-        <input type="number" id="aqi-input" min='10' max='60' />
+        <input type="number" id="aqi-input" min='10' max='100' />
         <div id="bts">
         	<button id="bt0" >left in</button>
             <button id="bt1" >right in</button>
@@ -67,7 +67,7 @@
             	window.dispatchEvent(evt);
             }
             function setHeight(data){
-            	data*=5;
+            	data*=3;
             	this.style.height=data+"px";
             }
             function jioumaopao(arr){
@@ -126,8 +126,8 @@
             		alert("Too much!!");
             		return false;
             	}
-            	if(v>60||v<10){
-            		alert("Shoud be a number that is 10 ~ 60 !");
+            	if(v>100||v<10){
+            		alert("Shoud be a number that is 10 ~ 100 !");
             		return false;
             	}
             	return v;
@@ -151,7 +151,7 @@
             //左侧出
             function leftOut() {
                 if(arr.length != 0){
-                    arr.shift();
+                    alert(arr.shift());
                 }else{
                     alert('Nothingle!');
                 }
@@ -159,7 +159,7 @@
             //右侧出
             function rightOut() {
                 if(arr.length != 0){
-                    arr.pop();
+                    alert(arr.pop());
                 }else{
                     alert('Nothingle!');
                 }
@@ -224,7 +224,7 @@
             var ultup=new ULtup("zhu");
             //var times=0;//记录趟数;
             var inp=document.getElementById("aqi-input");
-            var arr=[6,4,5,7,3,1,2,1,3,2,4,1,3,5,1];//arr作为初始事例;
+            var arr=[6,4,5,7,3,1,2,1,3,2,4,1,3,5,1];//arr作为初始实例;
             ultup.justuse(arr);//直接引用的arr;
             ultup.paint();
             window.addEventListener("painting",function (e){
