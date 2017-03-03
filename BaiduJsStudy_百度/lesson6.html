@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>IFE JavaScript Task 01</title>
+        <style>
+            /*.div{  纯粹的没用,备选方案
+                display: flex;
+                flex-direction: row;
+                flex-wrap: inherit;
+            }*/
+            *{
+            	font-family: "微软雅黑";
+            }
+            #aqi-input{
+            	width: 254px;
+            	height: 66px;
+            	display: block;
+            	margin: 5px 0;
+            }
+            #zhu{
+            	padding: 0;
+            	height 50px;
+            	list-style: none;
+            }
+            #zhu>li{
+            	display: inline-block;
+            	padding: 5px;
+            	width: auto;
+            	margin: 5px;
+            	background: #e66;
+            }
+            #bts{
+            	display: inline-block;
+            }
+            span{
+            	color: #EE6666;
+            }
+        </style>
+    </head>
+
+    <body>
+    	<h2>超简易分词与查询</h2>
+        <textarea id="aqi-input" ></textarea>
+        <div id="bts">
+        	<button id="bt0" >left in</button>
+            <button id="bt1" >right in</button>
+            <button id="bt2" >left out</button>
+            <button id="bt3" >right out</button>
+        </div>
+        <ul id="zhu">
+        	
+        </ul>
+        <input type="text" name="tofind" id="tofind" value="" /><button id="find" onclick="find()">Find</button>
+		<script type="text/javascript">
+			function painting(time){//自定义的事件函数;
+            	var evt=document.createEvent("CustomEvent");
+//          	evt.times=time;
+            	evt.initEvent("painting",true,true);
+            	window.dispatchEvent(evt);
+            }
+			function find(){
+				painting();//重绘;
+				var sdoc=document.getElementById("tofind");
+				var tofind=sdoc.value;
+				var lis=ultup.ul.getElementsByTagName("li");//获取elements数组;
+				var havefind=false;
+				for(var i=0;i<lis.length;i++){
+					var re=new RegExp(tofind,"gi");
+					if(re.test(lis[i].innerHTML)){
+						havefind=true;
+						lis[i].innerHTML=lis[i].innerHTML.replace(re,"<span>"+tofind+"</span>");
+						lis[i].style.background="papayawhip";
+					}
+				}
+				if(!havefind){
+					alert("can't find!");
+				}
+			}
+			
+            function setText(data){
+            	this.innerText=data;
+            }
+            //判断
+            function judge(){
+            	var str=inp.value;
+            	var rv=[];
+            	var t;
+            	var traggle=false;
+				for (var i = 0; i < str.length; i++) {
+					if(/\w|[\u4e00-\u9fa5]/.test(str[i])){
+						if(!traggle){//是从false变到true时;
+							if(t){//有东西就记录
+								rv.push(t);
+							}
+							t='';	//t 为新的数组;
+							traggle=true;
+						}
+						t+=str[i];
+					}
+					else{
+						traggle=false;//当2为 间隔时为false;
+					}
+				}
+				if(t){//记录有可能落下的最后一个;
+					rv.push(t);
+				};
+				if(rv.length<=0){
+					return false;
+				}//对象永为真;
+            	return rv;
+            }
+            //左侧入
+            function leftJoin() {
+            	var v=judge();
+                if(v){
+                    arr.unshift(...v);//ES 6 解构!
+                }
+            }
+
+            //右侧入
+            function rightJoin(){
+            	var v=judge();
+                if(v){
+                    arr.push(...v);
+                }
+            }
+
+            //左侧出
+            function leftOut() {
+                if(arr.length != 0){
+//                  alert(arr.shift());
+                    arr.shift();
+                }else{
+                    alert('Nothingle!');
+                }
+            }
+            //右侧出
+            function rightOut() {
+                if(arr.length != 0){
+//                  alert(arr.pop());
+                    arr.pop();
+                }else{
+                    alert('Nothingle!');
+                }
+            }
+            class ULtup{
+            	constructor(id,li){
+            		this.ul=document.getElementById(id);
+            		this.data=[];
+            		if(li){
+            			this.Li=li;
+            			return ;
+            		}
+            		this.Li=new Licreator();
+            		this.Li.addcf(setHeight);
+            	}
+            	setdata(arr){
+            		for (var i = 0; i < arr.length; i++) {
+            			this.data.push(arr[i]);
+            		}
+            	}
+            	justuse(arr){
+            		this.data=arr;
+            	}
+            	paint(){
+            		this.ul.innerHTML="";
+            		this.Li.reset();
+            		var listyle=document.styleSheets[0].rules[2].style;
+            		var len=this.data.length;
+            		for (var i = 0; i < len; i++) {
+            			this.ul.appendChild(this.Li.create(this.data[i]));
+            		}
+            	}
+            }
+            class Licreator{
+            	constructor(){
+//          		this.doc=document.getElementById(id);
+            		this.num=0;
+            		this.func=function (){return;}
+            	}
+            	reset(){
+            		this.num=0;
+            	}
+            	addcf(func){//控制create方式的函数接口
+            		this.func=func;
+            	}
+            	create(){
+            		this.num++;
+            		var li=document.createElement("li");
+            		this.func.apply(li,arguments);
+            		li.index=this.num;
+            		return li;
+            	}
+            }
+            function delete_docli(sdoc){
+            	arr.splice(sdoc.index-1,1);
+            	sdoc.style.display="none";
+            }
+            
+            //执行区::
+            var Li=new Licreator();
+            Li.addcf(setText);
+            var ultup=new ULtup("zhu",Li);
+            //var times=0;//记录趟数;
+            var inp=document.getElementById("aqi-input");
+            var arr=[1,2,3,4];//arr作为初始实例;
+            ultup.justuse(arr);//直接引用的arr;
+            ultup.paint();
+            window.addEventListener("painting",function (e){
+            	ultup.paint();
+            },false);
+            
+            document.getElementById("bts").addEventListener("click",function(e){//利用冒泡父代理子元素的事件;
+            	var id=e.target.id||e.srcElement.id;
+            	id=+id.slice(2);
+            	switch(id){
+            		case 0:leftJoin();break;
+            		case 1:rightJoin();break;
+            		case 2:leftOut();break;
+            		case 3:rightOut();break;
+            		return ;
+            	}
+            	painting();
+            },false);
+            document.getElementById("zhu").addEventListener("click",function (e){
+            	var sdoc=e.target||e.srcElement;
+            	var index=sdoc.index;//只有Li.creat的li有index;
+            	if(index){
+            		delete_docli(sdoc);//不方便由index得知sdoc;so 传递sdoc;
+            	}
+            },false);
+            
+		</script>
+	</body>
+</html>

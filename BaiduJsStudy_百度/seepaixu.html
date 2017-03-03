@@ -70,6 +70,9 @@
             	data*=3;
             	this.style.height=data+"px";
             }
+            function setText(data){
+            	this.innerText=data;
+            }
             function jioumaopao(arr){
             	var unsort=false;
             	for(var i=1;i<arr.length;i+=2){
@@ -165,9 +168,13 @@
                 }
             }
             class ULtup{
-            	constructor(id){
+            	constructor(id,li){
             		this.ul=document.getElementById(id);
             		this.data=[];
+            		if(li){
+            			this.Li=li;
+            			return ;
+            		}
             		this.Li=new Licreator();
             		this.Li.addcf(setHeight);
             	}
@@ -211,17 +218,20 @@
             		this.num++;
             		var li=document.createElement("li");
             		this.func.apply(li,arguments);
-            		li.index=this.num;
+            		li.index=this.num;//index 从1 开始了;
             		return li;
             	}
             }
             function delete_docli(sdoc){
-            	arr.splice(sdoc.index,1);
+            	arr.splice(sdoc.index-1,1);
             	sdoc.style.display="none";
             }
             
             //执行区::
-            var ultup=new ULtup("zhu");
+            var Li=new Licreator();
+            Li.addcf(setText);
+            Li.addcf(setHeight);
+            var ultup=new ULtup("zhu",Li);
             //var times=0;//记录趟数;
             var inp=document.getElementById("aqi-input");
             var arr=[6,4,5,7,3,1,2,1,3,2,4,1,3,5,1];//arr作为初始实例;
